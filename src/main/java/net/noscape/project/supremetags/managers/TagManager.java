@@ -5,9 +5,13 @@ import net.noscape.project.supremetags.*;
 import net.noscape.project.supremetags.handlers.Tag;
 import org.bukkit.*;
 import org.bukkit.command.*;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 import static net.noscape.project.supremetags.utils.Utils.msgPlayer;
@@ -17,14 +21,11 @@ public class TagManager {
     private final Map<String, Tag> tags = new HashMap<>();
     private final Map<Integer, String> dataItem = new HashMap<>();
 
-    ArrayList<BukkitTask> scheduler = new ArrayList<>();
-
     private boolean isCost;
 
-    private final String reload = SupremeTagsPremium.getInstance().getConfig().getString("messages.reload");
-    private final String noperm = SupremeTagsPremium.getInstance().getConfig().getString("messages.no-permission");
-    private final String notags = SupremeTagsPremium.getInstance().getConfig().getString("messages.no-tags");
-    private final String commanddisabled = SupremeTagsPremium.getInstance().getConfig().getString("messages.tag-command-disabled");
+    private File tagFile;
+    private FileConfiguration tagConfig;
+
     private final String invalidtag = SupremeTagsPremium.getInstance().getConfig().getString("messages.invalid-tag");
     private final String validtag = SupremeTagsPremium.getInstance().getConfig().getString("messages.valid-tag");
     private final String invalidcategory = SupremeTagsPremium.getInstance().getConfig().getString("messages.invalid-category");
@@ -43,19 +44,19 @@ public class TagManager {
 
             int orderID = tags.size() + 1;
 
-            Tag tag = new Tag(identifier, tagList, default_category, permission, description, cost, orderID);
+            Tag tag = new Tag(identifier, tagList, default_category, permission, description, cost, orderID, true);
             tags.put(identifier, tag);
 
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".tag", tag_string);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".permission", permission);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".order", orderID);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".description", description);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".category", default_category);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".display-item", "NAME_TAG");
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".displayname", "&7Tag: %tag%");
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".cost", cost);
-            SupremeTagsPremium.getInstance().saveConfig();
-            SupremeTagsPremium.getInstance().reloadConfig();
+            getTagConfig().set("tags." + identifier + ".tag", tag_string);
+            getTagConfig().set("tags." + identifier + ".permission", permission);
+            getTagConfig().set("tags." + identifier + ".order", orderID);
+            getTagConfig().set("tags." + identifier + ".description", description);
+            getTagConfig().set("tags." + identifier + ".withdrawable", true);
+            getTagConfig().set("tags." + identifier + ".category", default_category);
+            getTagConfig().set("tags." + identifier + ".display-item", "NAME_TAG");
+            getTagConfig().set("tags." + identifier + ".displayname", "&7Tag: %tag%");
+            getTagConfig().set("tags." + identifier + ".cost", cost);
+            saveTagConfig();
 
             msgPlayer(player, "&8[&6&lTAG&8] &7New tag created &6" + identifier + " &f- " + tag_string);
         } else {
@@ -73,19 +74,19 @@ public class TagManager {
 
             int orderID = tags.size() + 1;
 
-            Tag tag = new Tag(identifier, tagList, default_category, permission, description, cost, orderID);
+            Tag tag = new Tag(identifier, tagList, default_category, permission, description, cost, orderID, true);
             tags.put(identifier, tag);
 
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".tag", tag_string);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".permission", permission);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".order", orderID);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".description", description);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".category", default_category);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".display-item", "NAME_TAG");
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".displayname", "&7Tag: %tag%");
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".cost", cost);
-            SupremeTagsPremium.getInstance().saveConfig();
-            SupremeTagsPremium.getInstance().reloadConfig();
+            getTagConfig().set("tags." + identifier + ".tag", tag_string);
+            getTagConfig().set("tags." + identifier + ".permission", permission);
+            getTagConfig().set("tags." + identifier + ".order", orderID);
+            getTagConfig().set("tags." + identifier + ".description", description);
+            getTagConfig().set("tags." + identifier + ".withdrawable", true);
+            getTagConfig().set("tags." + identifier + ".category", default_category);
+            getTagConfig().set("tags." + identifier + ".display-item", "NAME_TAG");
+            getTagConfig().set("tags." + identifier + ".displayname", "&7Tag: %tag%");
+            getTagConfig().set("tags." + identifier + ".cost", cost);
+            saveTagConfig();
 
             msgPlayer(player, "&8[&6&lTAG&8] &7New tag created &6" + identifier + " &f- " + tag_string);
         } else {
@@ -103,19 +104,19 @@ public class TagManager {
 
             int orderID = tags.size() + 1;
 
-            Tag tag = new Tag(identifier, tagList, default_category, permission, description, cost, orderID);
+            Tag tag = new Tag(identifier, tagList, default_category, permission, description, cost, orderID, true);
             tags.put(identifier, tag);
 
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".tag", tag_string);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".permission", permission);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".order", orderID);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".description", description);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".category", default_category);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".display-item", "NAME_TAG");
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".displayname", "&7Tag: %tag%");
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".cost", cost);
-            SupremeTagsPremium.getInstance().saveConfig();
-            SupremeTagsPremium.getInstance().reloadConfig();
+            getTagConfig().set("tags." + identifier + ".tag", tag_string);
+            getTagConfig().set("tags." + identifier + ".permission", permission);
+            getTagConfig().set("tags." + identifier + ".order", orderID);
+            getTagConfig().set("tags." + identifier + ".description", description);
+            getTagConfig().set("tags." + identifier + ".withdrawable", true);
+            getTagConfig().set("tags." + identifier + ".category", default_category);
+            getTagConfig().set("tags." + identifier + ".display-item", "NAME_TAG");
+            getTagConfig().set("tags." + identifier + ".displayname", "&7Tag: %tag%");
+            getTagConfig().set("tags." + identifier + ".cost", cost);
+            saveTagConfig();
         }
     }
 
@@ -129,19 +130,19 @@ public class TagManager {
 
             int orderID = tags.size() + 1;
 
-            Tag tag = new Tag(identifier, tagList, default_category, permission, description, cost, orderID);
+            Tag tag = new Tag(identifier, tagList, default_category, permission, description, cost, orderID, true);
             tags.put(identifier, tag);
 
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".tag", tag_string);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".permission", permission);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".order", orderID);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".description", description);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".category", default_category);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".display-item", material);
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".displayname", "&7Tag: %tag%");
-            SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier + ".cost", cost);
-            SupremeTagsPremium.getInstance().saveConfig();
-            SupremeTagsPremium.getInstance().reloadConfig();
+            getTagConfig().set("tags." + identifier + ".tag", tag_string);
+            getTagConfig().set("tags." + identifier + ".permission", permission);
+            getTagConfig().set("tags." + identifier + ".order", orderID);
+            getTagConfig().set("tags." + identifier + ".description", description);
+            getTagConfig().set("tags." + identifier + ".withdrawable", true);
+            getTagConfig().set("tags." + identifier + ".category", default_category);
+            getTagConfig().set("tags." + identifier + ".display-item", material);
+            getTagConfig().set("tags." + identifier + ".displayname", "&7Tag: %tag%");
+            getTagConfig().set("tags." + identifier + ".cost", cost);
+            saveTagConfig();
         }
     }
 
@@ -150,9 +151,8 @@ public class TagManager {
             tags.remove(identifier);
 
             try {
-                SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier, null);
-                SupremeTagsPremium.getInstance().saveConfig();
-                SupremeTagsPremium.getInstance().reloadConfig();
+                getTagConfig().set("tags." + identifier, null);
+                saveTagConfig();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -168,9 +168,8 @@ public class TagManager {
             tags.remove(identifier);
 
             try {
-                SupremeTagsPremium.getInstance().getConfig().set("tags." + identifier, null);
-                SupremeTagsPremium.getInstance().saveConfig();
-                SupremeTagsPremium.getInstance().reloadConfig();
+                getTagConfig().set("tags." + identifier, null);
+                saveTagConfig();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -183,24 +182,26 @@ public class TagManager {
 
     public void loadTags() {
         int count = 0;
-        for (String identifier : Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getConfigurationSection("tags")).getKeys(false)) {
-            List<String> tag = SupremeTagsPremium.getInstance().getConfig().getStringList("tags." + identifier + ".tag");
-            String category = SupremeTagsPremium.getInstance().getConfig().getString("tags." + identifier + ".category");
-            String description = SupremeTagsPremium.getInstance().getConfig().getString("tags." + identifier + ".description");
+        for (String identifier : Objects.requireNonNull(getTagConfig().getConfigurationSection("tags")).getKeys(false)) {
+            List<String> tag = getTagConfig().getStringList("tags." + identifier + ".tag");
+            String category = getTagConfig().getString("tags." + identifier + ".category");
+            String description = getTagConfig().getString("tags." + identifier + ".description");
 
             String permission;
 
-            if (SupremeTagsPremium.getInstance().getConfig().getString("tags." + identifier + ".permission") != null) {
-                permission = SupremeTagsPremium.getInstance().getConfig().getString("tags." + identifier + ".permission");
+            if (getTagConfig().getString("tags." + identifier + ".permission") != null) {
+                permission = getTagConfig().getString("tags." + identifier + ".permission");
             } else {
                 permission = "none";
             }
 
-            int orderID = SupremeTagsPremium.getInstance().getConfig().getInt("tags." + identifier + ".order");
+            int orderID = getTagConfig().getInt("tags." + identifier + ".order");
 
-            double cost = SupremeTagsPremium.getInstance().getConfig().getDouble("tags." + identifier + ".cost");
+            double cost = getTagConfig().getDouble("tags." + identifier + ".cost");
 
-            Tag t = new Tag(identifier, tag, category, permission, description, cost, orderID);
+            boolean withdrawable = getTagConfig().getBoolean("tags." + identifier + ".withdrawable");
+
+            Tag t = new Tag(identifier, tag, category, permission, description, cost, orderID, withdrawable);
             tags.put(identifier, t);
             count++;
         }
@@ -315,5 +316,37 @@ public class TagManager {
         SupremeTagsPremium.getInstance().getConfig().set("tags." + tag.getIdentifier() + ".cost", tag.getCost());
         SupremeTagsPremium.getInstance().saveConfig();
         SupremeTagsPremium.getInstance().reloadConfig();
+    }
+
+    public void saveTagConfig() {
+        if (tagFile != null && tagConfig != null) {
+            try {
+                tagConfig.save(tagFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            loadFile();
+            saveTagConfig();
+        }
+    }
+
+    public FileConfiguration getTagConfig() {
+        return tagConfig;
+    }
+
+    public void loadFile() {
+        File file = new File(SupremeTagsPremium.getInstance().getDataFolder() + "tags.yml");
+
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        this.tagFile = file;
+        this.tagConfig = YamlConfiguration.loadConfiguration(file);
     }
 }

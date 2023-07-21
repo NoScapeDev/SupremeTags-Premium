@@ -31,10 +31,10 @@ public class SetupListener implements Listener {
                 setup.setStage(2);
                 msgPlayer(player, "&6&lStage 2: &7What do you want the tag to look like? &6&o(type in normal chat)",
                         "&eUse normal or hex color formats (&#<code> or &-0-9/a-f) *without the -*");
-            } else if (currentStage == 2 && setup.getIdentifier() != null && setup.getTag() == null) {
+            } else if (currentStage == 2 && setup.isIdentifierSet() && !setup.isTagSet()) {
                 setup.setTag(event.getMessage());
                 setup.setStage(3);
-            } else if (currentStage == 3 && setup.getIdentifier() != null && setup.getTag() != null) {
+            } else if (currentStage == 3 && setup.isIdentifierSet() && setup.isTagSet()) {
                 setup.setStage(3);
 
                 List<String> tagList = new ArrayList<>();

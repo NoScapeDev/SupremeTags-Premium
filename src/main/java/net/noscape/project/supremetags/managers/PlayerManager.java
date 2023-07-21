@@ -43,6 +43,18 @@ public class PlayerManager {
         return playerTags;
     }
 
+    public Map<String, Tag> loadAllPlayerTags(UUID uuid) {
+        Map<String, Tag> pt = new HashMap<>();
+
+        if (!playerTags.containsKey(uuid)) {
+            for (Tag t : playerTags.get(uuid)) {
+                String identifier = t.getIdentifier();
+                pt.put(identifier, t);
+            }
+        }
+
+        return pt;
+    }
 
     public void addTag(Player player, Tag tag) {
         getPlayerTags().get(player.getUniqueId()).add(tag);

@@ -278,6 +278,10 @@ public class Tags implements CommandExecutor {
                     } else {
                         msgPlayer(player, noperm);
                     }
+                } else if (args[0].equalsIgnoreCase("withdraw")) {
+                    String name = args[0];
+
+                    SupremeTagsPremium.getInstance().getVoucherManager().withdrawTag(player, name);
                 } else if (args[0].equalsIgnoreCase("reset")) {
                     if (player.hasPermission("supremetags.admin")) {
                         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);

@@ -18,6 +18,10 @@ public class EditorListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onChat(AsyncPlayerChatEvent e) {
+        edit(e);
+    }
+
+    public void edit(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
         if (!SupremeTagsPremium.getInstance().getEditorList().containsKey(player)) return;
 
@@ -25,46 +29,45 @@ public class EditorListener implements Listener {
 
         Editor editor = SupremeTagsPremium.getInstance().getEditorList().get(player);
 
+        EditingType type = editor.getType();
 
-        if (editor.getType() == EditingType.CHANGING_TAG) {
-            e.setCancelled(true);
+        Tag tag = SupremeTagsPremium.getInstance().getTagManager().getTag(editor.getIdentifier());
 
-            Tag tag = SupremeTagsPremium.getInstance().getTagManager().getTag(editor.getIdentifier());
-            List<String> tagList = tag.getTag();
-            tagList.add(message);
+        e.setCancelled(true);
 
-            tag.setTag(tagList);
-            SupremeTagsPremium.getInstance().getTagManager().saveTag(tag);
+        switch (type) {
+            case CHANGING_TAG:
+                List<String> tagList = tag.getTag();
+                tagList.add(message);
 
-            SupremeTagsPremium.getInstance().getEditorList().remove(player);
-            msgPlayer(player, "&8[&6&lTags&8] &7Data Updated.");
-        } else if (editor.getType() == EditingType.CHANGING_CATEGORY) {
-            e.setCancelled(true);
+                tag.setTag(tagList);
+                break;
+            case CHANGING_PERMISSION:
+                tag.setPermission(message);
+                break;
+            case CHANGING_CATEGORY:
+                tag.setCategory(message);
+                break;
+            case CHANGING_COST:
+                // do checks to make sure that the message is a double/number...
 
-            Tag tag = SupremeTagsPremium.getInstance().getTagManager().getTag(editor.getIdentifier());
-            tag.setCategory(message);
-            SupremeTagsPremium.getInstance().getTagManager().saveTag(tag);
+                tag.setCost(Double.parseDouble(message));
+                break;
+            case CHANGING_DESCRIPTION:
+                tag.setDescription(message);
+                break;
+            case CHANGING_ORDER:
+                // do checks to make sure that the message is a integer/number...
 
-            SupremeTagsPremium.getInstance().getEditorList().remove(player);
-            msgPlayer(player, "&8[&6&lTags&8] &7Data Updated.");
-        } else if (editor.getType() == EditingType.CHANGING_DESCRIPTION) {
-            e.setCancelled(true);
-
-            Tag tag = SupremeTagsPremium.getInstance().getTagManager().getTag(editor.getIdentifier());
-            tag.setDescription(message);
-            SupremeTagsPremium.getInstance().getTagManager().saveTag(tag);
-
-            SupremeTagsPremium.getInstance().getEditorList().remove(player);
-            msgPlayer(player, "&8[&6&lTags&8] &7Data Updated.");
-        } else if (editor.getType() == EditingType.CHANGING_PERMISSION) {
-            e.setCancelled(true);
-
-            Tag tag = SupremeTagsPremium.getInstance().getTagManager().getTag(editor.getIdentifier());
-            tag.setPermission(message);
-            SupremeTagsPremium.getInstance().getTagManager().saveTag(tag);
-
-            SupremeTagsPremium.getInstance().getEditorList().remove(player);
-            msgPlayer(player, "&8[&6&lTags&8] &7Data Updated.");
+                tag.setOrder(Integer.parseInt(message));
+                break;
         }
+
+        // reopen the specific tag editor.
+        new SpecificTagMenu(SupremeTagsPremium.getMenuUtilIdentifier(player, editor.getIdentifier())).open();
+
+        SupremeTagsPremium.getInstance().getEditorList().remove(player);
+        SupremeTagsPremium.getInstance().getTagManager().saveTag(tag);
+        msgPlayer(player, "&8[&6&lTags&8] &7Tag has been updated.");
     }
 }

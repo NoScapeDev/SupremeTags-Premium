@@ -223,17 +223,17 @@ public abstract class Paged extends Menu {
                 Tag t = tag.get(i);
                 if (t == null) continue;
 
-                String permission = SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".permission");
+                String permission = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".permission");
 
                 if (permission != null && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system")  && !menuUtil.getOwner().hasPermission(permission)) continue;
 
                 String displayname;
 
-                if (SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".displayname") != null) {
+                if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".displayname") != null) {
                     if (t.getCurrentTag() != null) {
-                        displayname = Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".displayname")).replace("%tag%", t.getCurrentTag());
+                        displayname = Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".displayname")).replace("%tag%", t.getCurrentTag());
                     } else {
-                        displayname = Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".displayname")).replace("%tag%", t.getTag().get(0));
+                        displayname = Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".displayname")).replace("%tag%", t.getTag().get(0));
                     }
                 } else {
                     displayname = format("&7Tag: " + t.getCurrentTag());
@@ -245,8 +245,8 @@ public abstract class Paged extends Menu {
 
                 String material;
 
-                if (SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".display-item") != null) {
-                    material = SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".display-item");
+                if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".display-item") != null) {
+                    material = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".display-item");
                 } else {
                     material = "NAME_TAG";
                 }
@@ -284,18 +284,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -333,18 +333,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -379,18 +379,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -434,18 +434,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -482,18 +482,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -527,18 +527,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -576,18 +576,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -625,18 +625,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -671,18 +671,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -745,17 +745,17 @@ public abstract class Paged extends Menu {
                 Tag t = tag.get(i);
                 if (t == null) continue;
 
-                String permission = SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".permission");
+                String permission = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".permission");
 
                 if (permission != null && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system")  && !menuUtil.getOwner().hasPermission(permission)) continue;
 
                 String displayname;
 
-                if (SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".displayname") != null) {
+                if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".displayname") != null) {
                     if (t.getCurrentTag() != null) {
-                        displayname = Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".displayname")).replace("%tag%", t.getCurrentTag());
+                        displayname = Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".displayname")).replace("%tag%", t.getCurrentTag());
                     } else {
-                        displayname = Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".displayname")).replace("%tag%", t.getTag().get(0));
+                        displayname = Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".displayname")).replace("%tag%", t.getTag().get(0));
                     }
                 } else {
                     displayname = format("&7Tag: " + t.getCurrentTag());
@@ -767,8 +767,8 @@ public abstract class Paged extends Menu {
 
                 String material;
 
-                if (SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".display-item") != null) {
-                    material = SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".display-item");
+                if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".display-item") != null) {
+                    material = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".display-item");
                 } else {
                     material = "NAME_TAG";
                 }
@@ -806,18 +806,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -855,18 +855,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -902,18 +902,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -957,18 +957,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -1006,18 +1006,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -1051,18 +1051,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -1100,21 +1100,22 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
+
                         tagMeta.setLore(color(lore));
 
                         nbt.getItem().setItemMeta(tagMeta);
@@ -1148,18 +1149,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -1194,18 +1195,18 @@ public abstract class Paged extends Menu {
                         List<String> lore;
 
                         if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-permission");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.locked-lore");
-                        } else if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-permission");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".locked-lore");
+                        } else if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getBoolean("settings.cost-system") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && menuUtil.getOwner().hasPermission(permission)) {
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else if(menuUtil.getOwner().hasPermission(permission)) {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         } else {
-                            lore = SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                            lore = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getStringList("tags." + t.getIdentifier() + ".unlocked-lore");
                         }
 
-                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".description")))));
+                        lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".description")))));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -1255,12 +1256,18 @@ public abstract class Paged extends Menu {
                 Tag t = tag.get(i);
                 if (t == null) continue;
 
-                String permission = SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".permission");
+                String permission = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".permission");
+
+                if (permission != null && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.locked-view") && !SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.cost-system")  && !menuUtil.getOwner().hasPermission(permission)) continue;
 
                 String displayname;
 
-                if (SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".displayname") != null) {
-                    displayname = Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".displayname")).replace("%tag%", t.getCurrentTag());
+                if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".displayname") != null) {
+                    if (t.getCurrentTag() != null) {
+                        displayname = Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".displayname")).replace("%tag%", t.getCurrentTag());
+                    } else {
+                        displayname = Objects.requireNonNull(SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".displayname")).replace("%tag%", t.getTag().get(0));
+                    }
                 } else {
                     displayname = format("&7Tag: " + t.getCurrentTag());
                 }
@@ -1271,8 +1278,8 @@ public abstract class Paged extends Menu {
 
                 String material;
 
-                if (SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".display-item") != null) {
-                    material = SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".display-item");
+                if (SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".display-item") != null) {
+                    material = SupremeTagsPremium.getInstance().getTagManager().getTagConfig().getString("tags." + t.getIdentifier() + ".display-item");
                 } else {
                     material = "NAME_TAG";
                 }

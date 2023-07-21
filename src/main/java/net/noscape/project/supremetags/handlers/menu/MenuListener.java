@@ -10,8 +10,6 @@ public class MenuListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        Player p = (Player) e.getWhoClicked();
-
         if (e.getClickedInventory() != null) {
             InventoryHolder holder = e.getClickedInventory().getHolder();
 

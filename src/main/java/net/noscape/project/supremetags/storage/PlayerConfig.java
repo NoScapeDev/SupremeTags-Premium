@@ -71,7 +71,7 @@ public class PlayerConfig {
                 List<String> tabList = new ArrayList<>();
                 tabList.add(tag);
 
-                Tag t = new Tag(identifier, tabList, "", "", description, 0);
+                Tag t = new Tag(identifier, tabList, "", "", description, 0, false);
                 tags.add(t);
             }
 

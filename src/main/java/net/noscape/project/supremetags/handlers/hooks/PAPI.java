@@ -67,6 +67,35 @@ public class PAPI extends PlaceholderExpansion {
                 if (params.equalsIgnoreCase("tag")) {
                     String tag;
 
+                    /*
+                     *  get personal tags well.
+                     *
+                     */
+
+                    if (t.getCurrentTag() != null) {
+                        tag = t.getCurrentTag();
+                    } else {
+                        tag = t.getTag().get(0);
+                    }
+
+                    text = PlaceholderAPI.setPlaceholders(player, tag);
+                } else if (params.equalsIgnoreCase("identifier")) {
+                    text = t.getIdentifier();
+                } else if (params.equalsIgnoreCase("description")) {
+                    text = t.getDescription();
+                } else if (params.equalsIgnoreCase("permission")) {
+                    text = t.getPermission();
+                } else if (params.equalsIgnoreCase("category")) {
+                    text = t.getCategory();
+                } else if (params.equalsIgnoreCase("cost")) {
+                    text = String.valueOf(t.getCost());
+                }
+            } else if (SupremeTagsPremium.getInstance().getPlayerManager().loadAllPlayerTags(player.getUniqueId()).get(UserData.getActive(player.getUniqueId())) != null) {
+                Tag t = SupremeTagsPremium.getInstance().getPlayerManager().loadAllPlayerTags(player.getUniqueId()).get(UserData.getActive(player.getUniqueId()));
+
+                if (params.equalsIgnoreCase("tag")) {
+                    String tag;
+
                     if (t.getCurrentTag() != null) {
                         tag = t.getCurrentTag();
                     } else {

@@ -19,30 +19,39 @@ public class TagsComplete implements TabCompleter {
 
         if (cmd.getName().equalsIgnoreCase("tags")) {
             if (args.length == 1) {
-                completions.addAll(Arrays.asList("create", "settag", "setcategory", "set", "reload", "help", "config", "list", "editor", "merge", "delete", "reset"));
-            } else if (args.length == 2) {
-                if (args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("settag") || args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("reset")) {
-                    // Retrieve available tag names
-                    completions.addAll(SupremeTagsPremium.getInstance().getTagManager().getTags().keySet());
-                } else if (args[0].equalsIgnoreCase("set")) {
-                    // Add code here to retrieve available player names
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        completions.add(player.getName());
+                if (sender.hasPermission("supremetags.admin")) {
+                    completions.addAll(Arrays.asList("create", "settag", "setcategory", "set", "reload", "help", "config", "list", "editor", "merge", "delete", "reset", "withdraw"));
+                } else if (!sender.hasPermission("supremetags.admin") && sender.hasPermission("supremetags.withdraw")) {
+                    completions.addAll(Arrays.asList("withdraw", "help"));
+                }
+
+                } else if (args.length == 2) {
+                if (sender.hasPermission("supremetags.admin")) {
+                    if (args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("settag") || args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("reset")) {
+                        // Retrieve available tag names
+                        completions.addAll(SupremeTagsPremium.getInstance().getTagManager().getTags().keySet());
+                    } else if (args[0].equalsIgnoreCase("set")) {
+                        // Add code here to retrieve available player names
+                        for (Player player : Bukkit.getOnlinePlayers()) {
+                            completions.add(player.getName());
+                        }
+                    } else if (args[0].equalsIgnoreCase("setcategory")) {
+                        // Retrieve available category names
+                        completions.addAll(SupremeTagsPremium.getInstance().getCategoryManager().getCatorgies());
                     }
-                } else if (args[0].equalsIgnoreCase("setcategory")) {
-                    // Retrieve available category names
-                    completions.addAll(SupremeTagsPremium.getInstance().getCategoryManager().getCatorgies());
                 }
             } else if (args.length == 3) {
-                if (args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("settag")) {
-                    // Add code here to retrieve available tag values
-                    completions.addAll(SupremeTagsPremium.getInstance().getTagManager().getTags().keySet());
-                } else if (args[0].equalsIgnoreCase("setcategory")) {
-                    String categoryName = args[1];
-                    completions.addAll(SupremeTagsPremium.getInstance().getCategoryManager().getCatorgies());
-                } else if (args[0].equalsIgnoreCase("set")) {
-                    // Add code here to retrieve available tag names
-                    completions.addAll(SupremeTagsPremium.getInstance().getTagManager().getTags().keySet());
+                if (sender.hasPermission("supremetags.admin")) {
+                    if (args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("settag")) {
+                        // Add code here to retrieve available tag values
+                        completions.addAll(SupremeTagsPremium.getInstance().getTagManager().getTags().keySet());
+                    } else if (args[0].equalsIgnoreCase("setcategory")) {
+                        String categoryName = args[1];
+                        completions.addAll(SupremeTagsPremium.getInstance().getCategoryManager().getCatorgies());
+                    } else if (args[0].equalsIgnoreCase("set")) {
+                        // Add code here to retrieve available tag names
+                        completions.addAll(SupremeTagsPremium.getInstance().getTagManager().getTags().keySet());
+                    }
                 }
             }
         }

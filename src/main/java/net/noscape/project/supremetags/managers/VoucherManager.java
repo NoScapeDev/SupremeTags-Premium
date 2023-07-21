@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.permissions.PermissionAttachment;
 
 import java.util.Objects;
 
@@ -23,39 +24,28 @@ public class VoucherManager {
 
     public VoucherManager() {}
 
-    public boolean isVoucherTag(ItemStack item) {
-        NBTItem nbt = new NBTItem(item);
-
-        String displayname = deformat(Objects.requireNonNull(item.getItemMeta()).getDisplayName());
-
-        if (nbt.hasNBTData()) {
-            if (displayname.startsWith("Tag Voucher:") && nbt.getString("permission") != null) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public boolean hasTag(Player player, ItemStack item) {
-        return player.hasPermission(getVoucherPermission(item));
-    }
-
-    public void giveTag(Player player) {
-
-    }
-
     public void withdrawTag(Player player, String tag_name) {
-
         if (isInventoryFull(player)) {
             msgPlayer(player, "&8[&6&lTags&8] &7This withdraw process has cancelled, inventory full!");
             return;
         }
 
-        /// remove permission
-        /// HERE .......
-
         Tag t = SupremeTagsPremium.getInstance().getTagManager().getTag(tag_name);
+
+        if (t == null) {
+            msgPlayer(player, "&8[&6&lTags&8] &7This withdraw process has cancelled, this tag does not exist!");
+            return;
+        }
+
+        if (!player.hasPermission(t.getPermission())) {
+            msgPlayer(player, "&8[&6&lTags&8] &7This withdraw process has cancelled, you don't own this tag!");
+            return;
+        }
+
+        if (!t.isWithdrawable()) {
+            msgPlayer(player, "&8[&6&lTags&8] &7This withdraw process has cancelled, this tag is not withdrawable!");
+            return;
+        }
 
         removePermission(player, t.getPermission());
 
@@ -65,23 +55,14 @@ public class VoucherManager {
         assert tagMeta != null;
 
         NBTItem nbt = new NBTItem(tag);
-        nbt.setString("permission", t.getPermission());
+        nbt.setString("identifier", t.getIdentifier());
 
-        tagMeta.setDisplayName(format("&7Tag"));
+        tagMeta.setDisplayName(format("&7Tag: " + t.getTag().get(0)));
 
-        msgPlayer(player, "&8[&6&lTags&8] &7Tag Withdrawn!");
-    }
+        nbt.getItem().setItemMeta(tagMeta);
+        player.getInventory().addItem(nbt.getItem());
 
-    public String getVoucherPermission(ItemStack item) {
-        NBTItem nbt = new NBTItem(item);
-
-        String permission = null;
-
-        if (isVoucherTag(item)) {
-            permission = nbt.getString("permission");
-        }
-
-        return permission;
+        msgPlayer(player, "&8[&6&lTags&8] &7Tag &f" + t.getIdentifier() + " &7Withdrawn!");
     }
 
     public boolean isInventoryFull(Player player) {
@@ -91,16 +72,9 @@ public class VoucherManager {
     }
 
     private void removePermission(Player player, String permission) {
-        LuckPerms luckPerms = LuckPermsProvider.get();
-        User user = luckPerms.getUserManager().getUser(player.getUniqueId());
+        PermissionAttachment attachment = player.addAttachment(SupremeTagsPremium.getInstance());
+        attachment.setPermission(permission, false);
 
-        if (user != null) {
-            Node permissionNode = Node.builder(permission).build();
-            user.data().remove(permissionNode);
-
-            luckPerms.getUserManager().saveUser(user);
-            luckPerms.getUserManager().cleanupUser(user);
-            player.recalculatePermissions();
-        }
+        player.recalculatePermissions();
     }
 }

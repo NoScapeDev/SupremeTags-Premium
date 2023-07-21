@@ -4,7 +4,6 @@ import net.noscape.project.supremetags.SupremeTagsPremium;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Tag {
@@ -17,10 +16,11 @@ public class Tag {
     private double cost;
     private String current_tag;
     private int order;
+    private boolean isWithdrawable;
 
     private BukkitTask animationTask;
 
-    public Tag(String identifier, List<String> tag, String category, String permission, String description, double cost, int order) {
+    public Tag(String identifier, List<String> tag, String category, String permission, String description, double cost, int order, boolean isWithdrawable) {
         this.identifier = identifier;
         this.tag = tag;
         this.category = category;
@@ -28,15 +28,17 @@ public class Tag {
         this.description = description;
         this.cost = cost;
         this.order = order;
+        this.isWithdrawable = isWithdrawable;
     }
 
-    public Tag(String identifier, List<String> tag, String category, String permission, String description, double cost) {
+    public Tag(String identifier, List<String> tag, String category, String permission, String description, double cost, boolean isWithdrawable) {
         this.identifier = identifier;
         this.tag = tag;
         this.category = category;
         this.permission = permission;
         this.description = description;
         this.cost = cost;
+        this.isWithdrawable = isWithdrawable;
     }
 
     public Tag(String identifier, List<String> tag, String description) {
@@ -126,25 +128,19 @@ public class Tag {
         }
     }
 
-    private List<String> getAnimatedTag(String currentFrame) {
-        // Modify this method according to your animation requirements
-        // This example assumes the currentFrame is a prefix to be added to each tag line
-        List<String> animatedTag = new ArrayList<>();
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String line : tag) {
-            stringBuilder.setLength(0); // Clear the StringBuilder
-            stringBuilder.append(currentFrame).append(line);
-            animatedTag.add(stringBuilder.toString());
-        }
-        return animatedTag;
-    }
-
-
     public String getCurrentTag() {
         return current_tag;
     }
 
     public int getOrder() {
         return order;
+    }
+
+    public boolean isWithdrawable() {
+        return isWithdrawable;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }

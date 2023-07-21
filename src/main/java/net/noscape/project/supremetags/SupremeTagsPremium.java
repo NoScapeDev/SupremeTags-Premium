@@ -101,25 +101,9 @@ public final class SupremeTagsPremium extends JavaPlugin {
         this.saveDefaultConfig();
         this.callMetrics();
 
+        loadDatabases();
+
         sendConsoleLog();
-
-        if (isH2()) {
-            connectionURL = "jdbc:h2:" + getDataFolder().getAbsolutePath() + "/database";
-            h2 = new H2Database(connectionURL);
-        }
-
-        if (isSQLite()) {
-            connectionURL = "jdbc:sqlite:" + getDataFolder().getAbsolutePath() + "/database.db";
-            sqlite = new SQLiteDatabase(connectionURL);
-        }
-
-        if (isMySQL()) {
-            mysql = new MySQLDatabase(host, port, database, username, password, options);
-        }
-
-        if (isMaria()) {
-            maria = new MariaDatabase(host, port, database, username, password, options);
-        }
 
         tagManager = new TagManager(getConfig().getBoolean("settings.cost-system"));
         categoryManager = new CategoryManager();
@@ -127,6 +111,8 @@ public final class SupremeTagsPremium extends JavaPlugin {
         voucherManager = new VoucherManager();
         mergeManager = new MergeManager();
         playerConfig = new PlayerConfig();
+
+        tagManager.loadFile();
 
         if (Bukkit.getServer().getPluginManager().getPlugin("Luckperms") != null) {
             Objects.requireNonNull(getCommand("tags")).setExecutor(new Tags());
@@ -181,6 +167,8 @@ public final class SupremeTagsPremium extends JavaPlugin {
 
         api = new SupremeTagsAPI();
 
+
+        // load tags again incase they did not load properly, on first installment.
         if (tagManager.getTags().size() == 0) {
             tagManager.loadTags();
         }
@@ -259,6 +247,26 @@ public final class SupremeTagsPremium extends JavaPlugin {
         cmi_hex = getConfig().getBoolean("settings.cmi-color-support");
         disabledWorldsTag = getConfig().getBoolean("settings.tag-command-in-disabled-worlds");
         layout = getConfig().getString("settings.layout-type");
+    }
+
+    private void loadDatabases() {
+        if (isH2()) {
+            connectionURL = "jdbc:h2:" + getDataFolder().getAbsolutePath() + "/database";
+            h2 = new H2Database(connectionURL);
+        }
+
+        if (isSQLite()) {
+            connectionURL = "jdbc:sqlite:" + getDataFolder().getAbsolutePath() + "/database.db";
+            sqlite = new SQLiteDatabase(connectionURL);
+        }
+
+        if (isMySQL()) {
+            mysql = new MySQLDatabase(host, port, database, username, password, options);
+        }
+
+        if (isMaria()) {
+            maria = new MariaDatabase(host, port, database, username, password, options);
+        }
     }
 
     public boolean isLegacyFormat() {

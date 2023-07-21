@@ -17,7 +17,6 @@ public class CategoryManager {
         loadCategoriesTags();
     }
 
-
     public void loadCategoriesTags() {
         catorgiesTags.clear();
 
@@ -32,7 +31,6 @@ public class CategoryManager {
             catorgiesTags.put(cats, value);
         }
     }
-
 
     public List<String> getCatorgies() {
         return catorgies;
