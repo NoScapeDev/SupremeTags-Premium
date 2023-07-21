@@ -1,6 +1,6 @@
 package net.noscape.project.supremetags.guis.tageditor;
 
-import net.noscape.project.supremetags.SupremeTags;
+import net.noscape.project.supremetags.SupremeTagsPremium;
 import net.noscape.project.supremetags.enums.EditingType;
 import net.noscape.project.supremetags.handlers.Editor;
 import net.noscape.project.supremetags.handlers.Tag;
@@ -40,32 +40,32 @@ public class SpecificTagMenu extends Menu {
 
         if (i == null) return;
         if (i.getItemMeta() == null) return;
-        if (SupremeTags.getInstance().getEditorList().containsKey(player)) return;
+        if (SupremeTagsPremium.getInstance().getEditorList().containsKey(player)) return;
 
         String displayname = deformat(i.getItemMeta().getDisplayName());
 
         if (displayname.equalsIgnoreCase("Change Tag")) {
             Editor editor = new Editor(menuUtil.getIdentifier(), EditingType.CHANGING_TAG);
-            SupremeTags.getInstance().getEditorList().put(player, editor);
+            SupremeTagsPremium.getInstance().getEditorList().put(player, editor);
             player.closeInventory();
             msgPlayer(player, "&8[&6&lTags&8] &7You are setting a new tag. &6Type it in chat.");
         } else if (displayname.equalsIgnoreCase("Change Description")) {
             Editor editor = new Editor(menuUtil.getIdentifier(), EditingType.CHANGING_DESCRIPTION);
-            SupremeTags.getInstance().getEditorList().put(player, editor);
+            SupremeTagsPremium.getInstance().getEditorList().put(player, editor);
             player.closeInventory();
             msgPlayer(player, "&8[&6&lTags&8] &7You are setting a new description. &6Type it in chat.");
         } else if (displayname.equalsIgnoreCase("Change Category")) {
             Editor editor = new Editor(menuUtil.getIdentifier(), EditingType.CHANGING_CATEGORY);
-            SupremeTags.getInstance().getEditorList().put(player, editor);
+            SupremeTagsPremium.getInstance().getEditorList().put(player, editor);
             player.closeInventory();
             msgPlayer(player, "&8[&6&lTags&8] &7You are setting a new category. &6Type it in chat.");
         } else if (displayname.equalsIgnoreCase("Change Permission")) {
             Editor editor = new Editor(menuUtil.getIdentifier(), EditingType.CHANGING_PERMISSION);
-            SupremeTags.getInstance().getEditorList().put(player, editor);
+            SupremeTagsPremium.getInstance().getEditorList().put(player, editor);
             player.closeInventory();
             msgPlayer(player, "&8[&6&lTags&8] &7You are setting a new permission. &6Type it in chat.");
         } else if (displayname.equalsIgnoreCase("Delete Tag")) {
-            SupremeTags.getInstance().getTagManager().deleteTag(player, menuUtil.getIdentifier());
+            SupremeTagsPremium.getInstance().getTagManager().deleteTag(player, menuUtil.getIdentifier());
             player.closeInventory();
             msgPlayer(player, "&8[&6&lTags&8] &7Tag deleted!");
         } else {
@@ -76,13 +76,13 @@ public class SpecificTagMenu extends Menu {
     @Override
     public void setMenuItems() {
         if (menuUtil.getIdentifier() != null) {
-            if (SupremeTags.getInstance().getTagManager().getTag(menuUtil.getIdentifier()) != null) {
-                Tag t = SupremeTags.getInstance().getTagManager().getTag(menuUtil.getIdentifier());
+            if (SupremeTagsPremium.getInstance().getTagManager().getTag(menuUtil.getIdentifier()) != null) {
+                Tag t = SupremeTagsPremium.getInstance().getTagManager().getTag(menuUtil.getIdentifier());
 
                 List<String> lore = new ArrayList<>();
 
                 lore.add("&7Identifier: &6" + t.getIdentifier());
-                lore.add("&7Tag: " + t.getTag());
+                lore.add("&7Tag: " + t.getCurrentTag());
                 lore.add("&7Permission: &6" + t.getPermission());
                 lore.add("&7Category: &6" + t.getCategory());
                 lore.add("&7Cost: &6" + t.getCost());
@@ -91,16 +91,16 @@ public class SpecificTagMenu extends Menu {
 
                 String displayname;
 
-                if (SupremeTags.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".displayname") != null) {
-                    displayname = Objects.requireNonNull(SupremeTags.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".displayname")).replace("%tag%", t.getTag());
+                if (SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".displayname") != null) {
+                    displayname = Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("tags." + t.getIdentifier() + ".displayname")).replace("%tag%", t.getCurrentTag());
                 } else {
-                    displayname = format("&7Tag: " + t.getTag());
+                    displayname = format("&7Tag: " + t.getCurrentTag());
                 }
 
                 getInventory().setItem(4, makeItem(Material.BOOK, format(displayname), lore));
 
                 List<String> c_tag = new ArrayList<>();
-                c_tag.add("&7Current: &6" + t.getTag());
+                c_tag.add("&7Current: &6" + t.getCurrentTag());
                 getInventory().setItem(20, makeItem(Material.NAME_TAG, format("&e&lChange Tag"), c_tag));
 
                 List<String> c_desc = new ArrayList<>();

@@ -1,6 +1,6 @@
 name: SupremeTags
 version: '${project.version}'
-main: net.noscape.project.supremetags.SupremeTags
+main: net.noscape.project.supremetags.SupremeTagsPremium
 api-version: 1.13
 depend: [NBTAPI]
 softdepend: [PlaceholderAPI, HeadDatabase, VaultAPI]

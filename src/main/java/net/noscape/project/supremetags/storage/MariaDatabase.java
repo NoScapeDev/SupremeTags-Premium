@@ -74,7 +74,7 @@ public class MariaDatabase {
 
     public void disconnect() {
         try {
-            if (isConnected()) {
+            if (connection != null && isConnected()) {
                 this.connection.close();
                 this.isConnected = false;
             }

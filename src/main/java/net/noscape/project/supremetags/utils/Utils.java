@@ -4,9 +4,8 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
-import net.noscape.project.supremetags.SupremeTags;
+import net.noscape.project.supremetags.SupremeTagsPremium;
 import org.bukkit.Material;
-import org.bukkit.SkullType;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,13 +27,13 @@ public class Utils {
     private static Pattern p3 = Pattern.compile("#([A-Fa-f0-9]){6}");
 
     public static String format(String message) {
-        if (SupremeTags.getInstance().isCMIHex()) {
+        if (SupremeTagsPremium.getInstance().isCMIHex()) {
             Matcher match = p1.matcher(message);
             while (match.find()) {
                 getRGB(message);
             }
             return ChatColor.translateAlternateColorCodes('&', message);
-        } else if (SupremeTags.getInstance().isLegacyFormat()) {
+        } else if (SupremeTagsPremium.getInstance().isLegacyFormat()) {
             message = message.replace(">>", "").replace("<<", "");
             Matcher matcher = p2.matcher(message);
             while (matcher.find()) {
@@ -73,15 +72,15 @@ public class Utils {
     }
 
     public static void addPerm(Player player, String permission) {
-        SupremeTags.getPermissions().playerAdd(player, permission);
+        SupremeTagsPremium.getPermissions().playerAdd(player, permission);
     }
 
     public static boolean hasAmount(Player player, double cost) {
-        return SupremeTags.getEconomy().has(player, cost);
+        return SupremeTagsPremium.getEconomy().has(player, cost);
     }
 
     public static void take(Player player, double cost) {
-        SupremeTags.getEconomy().withdrawPlayer(player, cost);
+        SupremeTagsPremium.getEconomy().withdrawPlayer(player, cost);
     }
 
     public static String deformat(String str) {

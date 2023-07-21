@@ -1,7 +1,6 @@
 package net.noscape.project.supremetags.handlers.menu;
 
 import net.noscape.project.supremetags.*;
-import net.noscape.project.supremetags.storage.UserData;
 import org.bukkit.*;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
@@ -17,7 +16,7 @@ public abstract class Menu implements InventoryHolder {
     protected Inventory inventory;
 
     protected MenuUtil menuUtil;
-    protected ItemStack GLASS = makeItem(Material.valueOf(Objects.requireNonNull(SupremeTags.getInstance().getConfig().getString("gui.layout.glass-material")).toUpperCase()), " ");
+    protected ItemStack GLASS = makeItem(Material.valueOf(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("gui.layout.glass-material")).toUpperCase()), " ");
 
     public Menu(MenuUtil menuUtil) {
         this.menuUtil = menuUtil;

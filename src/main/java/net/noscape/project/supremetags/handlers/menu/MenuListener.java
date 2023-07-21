@@ -1,12 +1,10 @@
 package net.noscape.project.supremetags.handlers.menu;
 
-import net.noscape.project.supremetags.SupremeTags;
+import net.noscape.project.supremetags.SupremeTagsPremium;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
-
-import java.util.*;
 
 public class MenuListener implements Listener {
 
@@ -38,7 +36,7 @@ public class MenuListener implements Listener {
             InventoryHolder holder = e.getInventory().getHolder();
 
             if (holder instanceof Menu) {
-                SupremeTags.getInstance().getMenuUtil().remove(p);
+                SupremeTagsPremium.getInstance().getMenuUtil().remove(p);
             }
         }
     }

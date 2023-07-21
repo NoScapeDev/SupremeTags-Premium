@@ -16,7 +16,7 @@ public class PlayerEvents implements Listener {
     private final Map<String, Tag> tags;
 
     public PlayerEvents() {
-        tags = SupremeTags.getInstance().getTagManager().getTags();
+        tags = SupremeTagsPremium.getInstance().getTagManager().getTags();
     }
 
     @EventHandler
@@ -24,19 +24,28 @@ public class PlayerEvents implements Listener {
         Player player = e.getPlayer();
         UserData.createPlayer(player);
 
-        if (SupremeTags.getInstance().getConfig().getBoolean("settings.personal-tags.enable")) {
-            SupremeTags.getInstance().getPlayerConfig().loadPlayer(player);
+        if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.personal-tags.enable")) {
+            SupremeTagsPremium.getInstance().getPlayerConfig().loadPlayer(player);
         }
 
-        player.getClientViewDistance();
-
-        if (SupremeTags.getInstance().getConfig().getBoolean("settings.forced-tag")) {
+        if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.forced-tag")) {
             String activeTag = UserData.getActive(player.getUniqueId());
             if (activeTag.equalsIgnoreCase("None")) {
-                String defaultTag = SupremeTags.getInstance().getConfig().getString("settings.default-tag");
+                String defaultTag = SupremeTagsPremium.getInstance().getConfig().getString("settings.default-tag");
                 UserData.setActive(player, defaultTag);
             }
         }
+    }
+
+    @EventHandler
+    public void onLeave(PlayerQuitEvent e) {
+        Player player = e.getPlayer();
+
+        if (!SupremeTagsPremium.getInstance().getPlayerManager().getPlayerTags(player.getUniqueId()).isEmpty()) {
+            PlayerConfig.save(player);
+        }
+
+        SupremeTagsPremium.getInstance().getSetupList().remove(player);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -51,18 +60,25 @@ public class PlayerEvents implements Listener {
             e.setFormat(replace);
         } else {
             // Store the value of SupremeTags.getInstance().getTagManager().getTags().get(activeTag) in a local variable
-            Tag tag = SupremeTags.getInstance().getTagManager().getTags().get(activeTag);
+            Tag tag = SupremeTagsPremium.getInstance().getTagManager().getTags().get(activeTag);
             if (tag == null) {
                 e.setFormat(replace);
             } else {
-                // Store the value of format(twag.getTag()) in a local variable
-                String formattedTag = format(tag.getTag());
-                formattedTag = replacePlaceholders(player, formattedTag);
+                String t;
 
-                e.setFormat(format.replace("{tag}", formattedTag).replace("{supremetags_tag}", formattedTag).replace("{TAG}", formattedTag));
+                if (tag.getCurrentTag() != null) {
+                    t = tag.getCurrentTag();
+                } else {
+                    t = tag.getTag().get(0);
+                }
+
+                t = replacePlaceholders(player, t); // Replace placeholders for the player only
+
+                e.setFormat(format.replace("{tag}", format(t)).replace("{supremetags_tag}", format(t)).replace("{TAG}", format(t)));
             }
         }
     }
+
 
     public Map<String, Tag> getTags() {
         return tags;

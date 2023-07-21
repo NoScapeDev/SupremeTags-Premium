@@ -24,13 +24,11 @@ settings:
   personal-tags:
     enable: true # this setting allows players to make and access their own tags.
     limit: 10 # how many tags should a player be allowed to make?
-  # ORDERING TYPES: [A-Z - ACCESS - TAGORDER]
-  # use commas to apply multiple types together, note; ACCESS will always go first no matter the position.
-  order-pattern: 'ACCESS,TAGORDER'
   # layout types: [FULL, BORDER]
   # FULL - 36 tags
   # BORDER - 28 tags
   layout-type: 'FULL'
+  animated-tag-speed: 1 # in seconds
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -58,14 +56,14 @@ messages:
 # +------------------------------------------------------+ #
 ############################################################
 
-# mysql data settings.
 # make sure you can check your panel database info to make sure everything is correct.
+# Note: There are no extra steps needed for H2 or SQLite.
 data:
-  # types: [H2 / MYSQL / MARIADB]
-  type: 'H2'
+  # types: [H2 / SQLite(RECOMMENDED OVER H2) / MYSQL / MARIADB(PREFERRED OVER MYSQL)]
+  type: 'SQLite'
 
   # The address for the database server.
-  # - to enable this part, change type to 'MYSQL'
+  # - to enable this part, change type to 'MYSQL' or 'MARIADB'
   # - some hosts can use your domain or server ip.
   address: 'host'
   # The standard DB engine port is used by default
@@ -140,7 +138,7 @@ gui:
     reset-tag-material: 'RED_DYE'
     active-tag-material: 'NAME_TAG'
     close-menu-material: 'BARRIER'
-    refresh-material: 'GREEN_DYE'
+    personal-tags-material: 'ENDER_PEARL'
   # edit the item names of all items inside the gui.
   strings:
     back-item: '&7Back'
@@ -148,12 +146,10 @@ gui:
     reset-item: '&cReset'
     active-item: '&7Active: &6%identifier%'
     close-item: '&cClose'
-    refresh-item: '&aRefresh'
   # disable items in the gui.
   # setting these values to false will not display the item in tag gui.
   items:
     close-item: true
-    refresh-item: true
     reset-item: true
     glass-item: true # this will only disable for 'FULL' layout type.
     active-item: true
@@ -217,20 +213,25 @@ categories:
 
 tags:
   hexsupport: # 1.16+ server is required for hex colors to work.
-    tag: '&8[&#afe4a4&lH&#b1cdb1&le&#b3b6bd&lx&#b59fca&lC&#b688d7&lo&#b871e3&ll&#ba5af0&lo&#bc43fd&lr&8]'
+    # tags won't animate if there are only one string tag in the list.
+    tag:
+      - '&8[&#afe4a4&lH&#b1cdb1&le&#b3b6bd&lx&#b59fca&lC&#b688d7&lo&#b871e3&ll&#ba5af0&lo&#bc43fd&lr&8]'
     permission: 'supremetags.tag.hex'
     description: '&7This plugin supports normal/hex colors'
     category: 'default'
     order: 1
+    withdrawable: true
     displayname: '&7Tag: %tag%'
     display-item: 'NAME_TAG'
     cost: 200 # this is only implemented when 'cost-system' is enabled
   santa: # Christmas themed tag, shows in the Xmas category.
-    tag: '&8[&c&lSanta&8]'
+    tag:
+      - '&8[&c&lSanta&8]'
     permission: 'supremetags.tag.santa'
     description: '&7ho ho hooooooo!'
     category: 'xmas'
     order: 2
+    withdrawable: false
     displayname: '&7Tag: %tag%'
     display-item: 'NAME_TAG'
     cost: 100 # setting this to 0 when 'cost-system' is enabled, will make this tag free.

@@ -20,29 +20,27 @@ public class MainMenu extends Menu {
 
     public MainMenu(MenuUtil menuUtil) {
         super(menuUtil);
-        this.catorgies = SupremeTags.getInstance().getCategoryManager().getCatorgies();
-        this.categoriesTags = SupremeTags.getInstance().getCategoryManager().getCatorgiesTags();
+        this.catorgies = SupremeTagsPremium.getInstance().getCategoryManager().getCatorgies();
+        this.categoriesTags = SupremeTagsPremium.getInstance().getCategoryManager().getCatorgiesTags();
     }
 
     @Override
     public String getMenuName() {
-        return format(SupremeTags.getInstance().getConfig().getString("gui.main-menu.title"));
+        return format(SupremeTagsPremium.getInstance().getConfig().getString("gui.main-menu.title"));
     }
 
     @Override
     public int getSlots() {
-        return SupremeTags.getInstance().getConfig().getInt("gui.main-menu.size");
+        return SupremeTagsPremium.getInstance().getConfig().getInt("gui.main-menu.size");
     }
 
     @Override
     public void handleMenu(InventoryClickEvent e) {
 
         Player player = (Player) e.getWhoClicked();
-
         String category = dataItem.get(e.getSlot());
-
-        String material = SupremeTags.getInstance().getConfig().getString("categories." + category + ".material");
-        String permission = SupremeTags.getInstance().getConfig().getString("categories." + category + ".permission");
+        String material = SupremeTagsPremium.getInstance().getConfig().getString("categories." + category + ".material");
+        String permission = SupremeTagsPremium.getInstance().getConfig().getString("categories." + category + ".permission");
 
         boolean hasMinTags = false;
 
@@ -50,8 +48,6 @@ public class MainMenu extends Menu {
             if (cats != null) {
                 if (categoriesTags.get(cats) != null) {
                     hasMinTags = true;
-                } else {
-                    hasMinTags = false;
                 }
                 break;
             }
@@ -62,7 +58,7 @@ public class MainMenu extends Menu {
                 if (hasMinTags) {
                     if (permission != null && player.hasPermission(permission)) {
                         menuUtil.setCategory(category);
-                        new CategoryMenu(SupremeTags.getMenuUtil(player, category)).open();
+                        new CategoryMenu(SupremeTagsPremium.getMenuUtil(player, category)).open();
                         menuUtil.getOwner().updateInventory();
                     } else {
                         msgPlayer(player, "&cYou don't have permission to access these tags.");
@@ -73,6 +69,7 @@ public class MainMenu extends Menu {
                 }
             }
         }
+
     }
 
     @Override
@@ -81,11 +78,11 @@ public class MainMenu extends Menu {
         // loop through categories items.
         for (String cats : getCatorgies()) {
             if (cats != null) {
-                boolean canSee = SupremeTags.getInstance().getConfig().getBoolean("categories." + cats + ".permission-see-category");
-                String permission = SupremeTags.getInstance().getConfig().getString("categories." + cats + ".permission");
-                String material = SupremeTags.getInstance().getConfig().getString("categories." + cats + ".material");
-                int slot = SupremeTags.getInstance().getConfig().getInt("categories." + cats + ".slot");
-                String displayname = SupremeTags.getInstance().getConfig().getString("categories." + cats + ".id_display");
+                boolean canSee = SupremeTagsPremium.getInstance().getConfig().getBoolean("categories." + cats + ".permission-see-category");
+                String permission = SupremeTagsPremium.getInstance().getConfig().getString("categories." + cats + ".permission");
+                String material = SupremeTagsPremium.getInstance().getConfig().getString("categories." + cats + ".material");
+                int slot = SupremeTagsPremium.getInstance().getConfig().getInt("categories." + cats + ".slot");
+                String displayname = SupremeTagsPremium.getInstance().getConfig().getString("categories." + cats + ".id_display");
 
                 if (permission != null && menuUtil.getOwner().hasPermission(permission) && canSee) {
                     assert material != null;
@@ -98,7 +95,7 @@ public class MainMenu extends Menu {
                     cat_itemMeta.addItemFlags(ItemFlag.HIDE_DESTROYS);
 
                     // Set lore
-                    ArrayList<String> lore = (ArrayList<String>) SupremeTags.getInstance().getConfig().getStringList("categories." + cats + ".lore");
+                    ArrayList<String> lore = (ArrayList<String>) SupremeTagsPremium.getInstance().getConfig().getStringList("categories." + cats + ".lore");
                     if (categoriesTags.get(cats) != null) {
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tags_amount%", String.valueOf(categoriesTags.get(cats))));
                     } else {
@@ -123,7 +120,7 @@ public class MainMenu extends Menu {
                     cat_itemMeta.addItemFlags(ItemFlag.HIDE_DESTROYS);
 
                     // Set lore
-                    ArrayList<String> lore = (ArrayList<String>) SupremeTags.getInstance().getConfig().getStringList("categories." + cats + ".lore");
+                    ArrayList<String> lore = (ArrayList<String>) SupremeTagsPremium.getInstance().getConfig().getStringList("categories." + cats + ".lore");
                     if (categoriesTags.get(cats) != null) {
                         lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tags_amount%", String.valueOf(categoriesTags.get(cats))));
                     } else {
@@ -147,7 +144,7 @@ public class MainMenu extends Menu {
                     cat_itemMeta.addItemFlags(ItemFlag.HIDE_DESTROYS);
 
                     // Set lore
-                    ArrayList<String> lore = (ArrayList<String>) SupremeTags.getInstance().getConfig().getStringList("categories." + cats + ".lore");
+                    ArrayList<String> lore = (ArrayList<String>) SupremeTagsPremium.getInstance().getConfig().getStringList("categories." + cats + ".lore");
                     lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tags_amount%", String.valueOf(categoriesTags.get(cats))));
                     cat_itemMeta.setLore(color(lore));
 
@@ -160,7 +157,7 @@ public class MainMenu extends Menu {
             }
         }
 
-        if (SupremeTags.getInstance().getConfig().getBoolean("categories-menu-fill-empty")) {
+        if (SupremeTagsPremium.getInstance().getConfig().getBoolean("categories-menu-fill-empty")) {
             fillEmpty();
         }
     }

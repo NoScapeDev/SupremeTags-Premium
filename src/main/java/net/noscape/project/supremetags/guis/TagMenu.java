@@ -23,13 +23,13 @@ public class TagMenu extends Paged {
 
     public TagMenu(MenuUtil menuUtil) {
         super(menuUtil);
-        tags = SupremeTags.getInstance().getTagManager().getTags();
-        dataItem = SupremeTags.getInstance().getTagManager().getDataItem();
+        tags = SupremeTagsPremium.getInstance().getTagManager().getTags();
+        dataItem = SupremeTagsPremium.getInstance().getTagManager().getDataItem();
     }
 
     @Override
     public String getMenuName() {
-        return format(Objects.requireNonNull(SupremeTags.getInstance().getConfig().getString("gui.tag-menu-none-categories.title")).replaceAll("%page%", String.valueOf(this.getPage())));
+        return format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("gui.tag-menu-none-categories.title")).replaceAll("%page%", String.valueOf(this.getPage())));
     }
 
     @Override
@@ -42,18 +42,16 @@ public class TagMenu extends Paged {
 
         Player player = (Player) e.getWhoClicked();
 
-        String back = SupremeTags.getInstance().getConfig().getString("gui.strings.back-item");
-        String close = SupremeTags.getInstance().getConfig().getString("gui.strings.close-item");
-        String next = SupremeTags.getInstance().getConfig().getString("gui.strings.next-item");
-        String refresh = SupremeTags.getInstance().getConfig().getString("gui.strings.refresh-item");
-        String reset = SupremeTags.getInstance().getConfig().getString("gui.strings.reset-item");
-        String active = SupremeTags.getInstance().getConfig().getString("gui.strings.active-item");
+        String back = SupremeTagsPremium.getInstance().getConfig().getString("gui.strings.back-item");
+        String close = SupremeTagsPremium.getInstance().getConfig().getString("gui.strings.close-item");
+        String next = SupremeTagsPremium.getInstance().getConfig().getString("gui.strings.next-item");
+        String reset = SupremeTagsPremium.getInstance().getConfig().getString("gui.strings.reset-item");
+        String active = SupremeTagsPremium.getInstance().getConfig().getString("gui.strings.active-item");
 
+        String insufficient = SupremeTagsPremium.getInstance().getConfig().getString("messages.insufficient-funds");
+        String unlocked = SupremeTagsPremium.getInstance().getConfig().getString("messages.tag-unlocked");
 
-        String insufficient = SupremeTags.getInstance().getConfig().getString("messages.insufficient-funds");
-        String unlocked = SupremeTags.getInstance().getConfig().getString("messages.tag-unlocked");
-
-        if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTags.getInstance().getConfig().getString("gui.layout.glass-material")).toUpperCase()))) {
+        if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("gui.layout.glass-material")).toUpperCase()))) {
             e.setCancelled(true);
         }
 
@@ -64,9 +62,9 @@ public class TagMenu extends Paged {
         if (nbt.hasTag("identifier")) {
             String identifier = nbt.getString("identifier");
 
-            Tag t = SupremeTags.getInstance().getTagManager().getTag(identifier);
+            Tag t = SupremeTagsPremium.getInstance().getTagManager().getTag(identifier);
 
-            if (!SupremeTags.getInstance().getTagManager().isCost()) {
+            if (!SupremeTagsPremium.getInstance().getTagManager().isCost()) {
                 if (!UserData.getActive(player.getUniqueId()).equalsIgnoreCase(identifier) && identifier != null) {
                     if (player.hasPermission(t.getPermission())) {
 
@@ -80,11 +78,11 @@ public class TagMenu extends Paged {
                         super.open();
                         menuUtil.setIdentifier(tagevent.getTag());
 
-                        if (SupremeTags.getInstance().getConfig().getBoolean("settings.gui-messages")) {
-                            msgPlayer(player, SupremeTags.getInstance().getConfig().getString("messages.tag-select-message").replaceAll("%identifier%", identifier).replaceAll("%tag%", SupremeTags.getInstance().getTagManager().getTag(identifier).getTag()));
+                        if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.gui-messages")) {
+                            msgPlayer(player, SupremeTagsPremium.getInstance().getConfig().getString("messages.tag-select-message").replaceAll("%identifier%", identifier).replaceAll("%tag%", SupremeTagsPremium.getInstance().getTagManager().getTag(identifier).getCurrentTag()));
                         }
                     } else {
-                        msgPlayer(player, SupremeTags.getInstance().getConfig().getString("messages.locked-tag"));
+                        msgPlayer(player, SupremeTagsPremium.getInstance().getConfig().getString("messages.locked-tag"));
                     }
                 }
             } else {
@@ -99,8 +97,8 @@ public class TagMenu extends Paged {
                         super.open();
                         menuUtil.setIdentifier(tagevent.getTag());
 
-                        if (SupremeTags.getInstance().getConfig().getBoolean("settings.gui-messages")) {
-                            msgPlayer(player, SupremeTags.getInstance().getConfig().getString("messages.tag-select-message").replace("%identifier%", identifier).replaceAll("%tag%", SupremeTags.getInstance().getTagManager().getTag(identifier).getTag()));
+                        if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.gui-messages")) {
+                            msgPlayer(player, SupremeTagsPremium.getInstance().getConfig().getString("messages.tag-select-message").replace("%identifier%", identifier).replaceAll("%tag%", SupremeTagsPremium.getInstance().getTagManager().getTag(identifier).getCurrentTag()));
                         }
                     }
                 } else {
@@ -117,7 +115,7 @@ public class TagMenu extends Paged {
 
                         take(player, cost);
                         addPerm(player, t.getPermission());
-                        msgPlayer(player, unlocked.replaceAll("%identifier%", t.getIdentifier()).replaceAll("%tag%", SupremeTags.getInstance().getTagManager().getTag(identifier).getTag()));
+                        msgPlayer(player, unlocked.replaceAll("%identifier%", t.getIdentifier()).replaceAll("%tag%", SupremeTagsPremium.getInstance().getTagManager().getTag(identifier).getCurrentTag()));
                         super.open();
                     } else {
                         msgPlayer(player, insufficient.replaceAll("%cost%", String.valueOf(t.getCost())));
@@ -131,7 +129,7 @@ public class TagMenu extends Paged {
         }
 
         if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(format(reset))) {
-            if (!SupremeTags.getInstance().getConfig().getBoolean("settings.forced-tag")) {
+            if (!SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.forced-tag")) {
                 TagResetEvent tagEvent = new TagResetEvent(player, false);
                 Bukkit.getPluginManager().callEvent(tagEvent);
 
@@ -141,8 +139,8 @@ public class TagMenu extends Paged {
                 super.open();
                 menuUtil.setIdentifier("None");
 
-                if (SupremeTags.getInstance().getConfig().getBoolean("settings.gui-messages")) {
-                    msgPlayer(player, SupremeTags.getInstance().getConfig().getString("messages.reset-message"));
+                if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.gui-messages")) {
+                    msgPlayer(player, SupremeTagsPremium.getInstance().getConfig().getString("messages.reset-message"));
                 }
             } else {
                 TagResetEvent tagEvent = new TagResetEvent(player, false);
@@ -150,19 +148,19 @@ public class TagMenu extends Paged {
 
                 if (tagEvent.isCancelled()) return;
 
-                String defaultTag = SupremeTags.getInstance().getConfig().getString("settings.default-tag");
+                String defaultTag = SupremeTagsPremium.getInstance().getConfig().getString("settings.default-tag");
 
                 UserData.setActive(player, defaultTag);
                 super.open();
                 menuUtil.setIdentifier(defaultTag);
 
-                if (SupremeTags.getInstance().getConfig().getBoolean("settings.gui-messages")) {
-                    msgPlayer(player, SupremeTags.getInstance().getConfig().getString("messages.reset-message"));
+                if (SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.gui-messages")) {
+                    msgPlayer(player, SupremeTagsPremium.getInstance().getConfig().getString("messages.reset-message"));
                 }
             }
         }
 
-        if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTags.getInstance().getConfig().getString("gui.layout.back-next-material")).toUpperCase()))) {
+        if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("gui.layout.back-next-material")).toUpperCase()))) {
             if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(format(back))) {
                 if (page != 0) {
                     page = page - 1;
@@ -179,8 +177,7 @@ public class TagMenu extends Paged {
 
     @Override
     public void setMenuItems() {
-
-        getTagItems();
         applyLayout();
+        getTagItems();
     }
 }

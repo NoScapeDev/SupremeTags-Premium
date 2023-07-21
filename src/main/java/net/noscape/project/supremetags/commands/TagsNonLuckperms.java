@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.noscape.project.supremetags.utils.Utils.msgPlayer;
 
-public class Tags implements CommandExecutor {
+public class TagsNonLuckperms implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
@@ -81,32 +81,11 @@ public class Tags implements CommandExecutor {
                     } else if (args[0].equalsIgnoreCase("reset")) {
                         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
 
-                        // Check if LuckPerms is available
-                        Plugin luckPermsPlugin = Bukkit.getPluginManager().getPlugin("LuckPerms");
-                        if (luckPermsPlugin != null) {
-                            // Use LuckPerms APIs
-                            LuckPerms luckPerms = LuckPermsProvider.get();
-                            User user = luckPerms.getUserManager().getUser(target.getUniqueId());
-
-                            if (user != null) {
-                                for (Tag tag : SupremeTagsPremium.getInstance().getTagManager().getTags().values()) {
-                                    String permission = tag.getPermission();
-                                    if (user.getCachedData().getPermissionData().checkPermission(permission).asBoolean()) {
-                                        Node permissionNode = Node.builder(permission).build();
-                                        user.data().remove(permissionNode);
-                                    }
-                                }
-                                luckPerms.getUserManager().saveUser(user);
-                            }
-                        } else {
-                            // LuckPerms plugin is not available
-                            Bukkit.getLogger().warning("Luckperms not found, the plugin will remove permission features relating to /tag reset");
-                        }
-
                         if (SupremeTagsPremium.getInstance().getConfig().isBoolean("settings.forced-tag")) {
                             String defaultTag = SupremeTagsPremium.getInstance().getConfig().getString("settings.default-tag");
 
                             UserData.setActive(target, defaultTag);
+
                             msgPlayer(sender, "&8[&6&lTag&8] &7Reset &b" + target.getName() + "'s &7tag back to " + defaultTag);
                         } else {
                             UserData.setActive(target, "None");
@@ -286,28 +265,6 @@ public class Tags implements CommandExecutor {
                             String defaultTag = SupremeTagsPremium.getInstance().getConfig().getString("settings.default-tag");
 
                             UserData.setActive(target, defaultTag);
-
-                            // Check if LuckPerms is available
-                            Plugin luckPermsPlugin = Bukkit.getPluginManager().getPlugin("LuckPerms");
-                            if (luckPermsPlugin != null) {
-                                // Use LuckPerms APIs
-                                LuckPerms luckPerms = LuckPermsProvider.get();
-                                User user = luckPerms.getUserManager().getUser(target.getUniqueId());
-
-                                if (user != null) {
-                                    for (Tag tag : SupremeTagsPremium.getInstance().getTagManager().getTags().values()) {
-                                        String permission = tag.getPermission();
-                                        if (user.getCachedData().getPermissionData().checkPermission(permission).asBoolean()) {
-                                            Node permissionNode = Node.builder(permission).build();
-                                            user.data().remove(permissionNode);
-                                        }
-                                    }
-                                    luckPerms.getUserManager().saveUser(user);
-                                }
-                            } else {
-                                // LuckPerms plugin is not available
-                                Bukkit.getLogger().warning("Luckperms not found, the plugin will remove permission features relating to /tag reset");
-                            }
 
                             msgPlayer(player, "&8[&6&lTag&8] &7Reset &b" + target.getName() + "'s &7tag back to " + defaultTag);
                         } else {

@@ -11,9 +11,10 @@ public class CategoryManager {
 
     public CategoryManager() {}
 
-    public void loadCategories() {
+    public void initCategories() {
         catorgies.clear();
-        catorgies.addAll(Objects.requireNonNull(SupremeTags.getInstance().getConfig().getConfigurationSection("categories")).getKeys(false));
+        catorgies.addAll(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getConfigurationSection("categories")).getKeys(false));
+        loadCategoriesTags();
     }
 
 
@@ -22,8 +23,8 @@ public class CategoryManager {
 
         for (String cats : getCatorgies()) {
             int value = 0;
-            for (String tags : Objects.requireNonNull(SupremeTags.getInstance().getConfig().getConfigurationSection("tags")).getKeys(false)) {
-                String cat = SupremeTags.getInstance().getConfig().getString("tags." + tags + ".category");
+            for (String tags : Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getConfigurationSection("tags")).getKeys(false)) {
+                String cat = SupremeTagsPremium.getInstance().getConfig().getString("tags." + tags + ".category");
                 if (cats.equals(cat)) {
                     value++;
                 }

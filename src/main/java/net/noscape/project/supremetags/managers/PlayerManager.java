@@ -1,6 +1,5 @@
 package net.noscape.project.supremetags.managers;
 
-import net.noscape.project.supremetags.SupremeTags;
 import net.noscape.project.supremetags.handlers.Tag;
 import net.noscape.project.supremetags.storage.PlayerConfig;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,40 +10,46 @@ import java.util.*;
 
 public class PlayerManager {
 
-    private final Map<UUID, Tag> playerTags = new HashMap<>();
+    private final Map<UUID, List<Tag>> playerTags = new HashMap<>();
 
     public PlayerManager() {}
 
     public List<Tag> getPlayerTags(UUID uuid) {
-        List<Tag> tag_list = new ArrayList<>();
-
-        for (Tag t : playerTags.values()) {
-            if (playerTags.get(uuid) == null) break;
-
-            if (playerTags.get(uuid) == t) {
-                tag_list.add(t);
-            }
-        }
-
-        return tag_list;
+        return playerTags.get(uuid);
     }
 
     public void load(Player player) {
         playerTags.remove(player.getUniqueId());
 
+        List<Tag> tags = new ArrayList<>();
+
         if (PlayerConfig.get(player).getConfigurationSection("tags") != null) {
-            for (String identifier : PlayerConfig.get(player).getConfigurationSection("tags").getKeys(false)) {
+            for (String identifier : Objects.requireNonNull(PlayerConfig.get(player).getConfigurationSection("tags")).getKeys(false)) {
                 String tag = PlayerConfig.get(player).getString("tags." + identifier + ".tag");
                 String description = PlayerConfig.get(player).getString("tags." + identifier + ".description");
 
-                Tag t = new Tag(identifier, tag, description);
-                playerTags.put(player.getUniqueId(), t);
+                List<String> tagList = new ArrayList<>();
+                tagList.add(tag);
+
+                Tag t = new Tag(identifier, tagList, description);
+                tags.add(t);
             }
         }
+
+        playerTags.put(player.getUniqueId(), tags);
     }
 
-    public Map<UUID, Tag> getPlayerTags() {
+    public Map<UUID, List<Tag>> getPlayerTags() {
         return playerTags;
+    }
+
+
+    public void addTag(Player player, Tag tag) {
+        getPlayerTags().get(player.getUniqueId()).add(tag);
+    }
+
+    public void removeTag(Player player, Tag tag) {
+        getPlayerTags().get(player.getUniqueId()).remove(tag);
     }
 
     public void delete(Player player, String identifier) {
@@ -65,7 +70,7 @@ public class PlayerManager {
             tagSection = tagsSection.createSection(tag.getIdentifier());
         }
 
-        tagSection.set("tag", tag.getTag());
+        tagSection.set("tag", tag.getCurrentTag());
         tagSection.set("description", tag.getDescription());
 
         PlayerConfig.save(player); // Save the player's configuration to the file

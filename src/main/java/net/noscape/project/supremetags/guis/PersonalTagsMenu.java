@@ -1,9 +1,8 @@
 package net.noscape.project.supremetags.guis;
 
 import de.tr7zw.nbtapi.NBTItem;
-import net.noscape.project.supremetags.SupremeTags;
+import net.noscape.project.supremetags.SupremeTagsPremium;
 import net.noscape.project.supremetags.api.events.TagAssignEvent;
-import net.noscape.project.supremetags.api.events.TagBuyEvent;
 import net.noscape.project.supremetags.api.events.TagResetEvent;
 import net.noscape.project.supremetags.handlers.SetupTag;
 import net.noscape.project.supremetags.handlers.Tag;
@@ -21,7 +20,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import static net.noscape.project.supremetags.utils.Utils.*;
@@ -33,7 +31,7 @@ public class PersonalTagsMenu extends Paged {
 
     public PersonalTagsMenu(MenuUtil menuUtil) {
         super(menuUtil);
-        tags = SupremeTags.getInstance().getPlayerManager().getPlayerTags(menuUtil.getOwner().getUniqueId());
+        tags = SupremeTagsPremium.getInstance().getPlayerManager().getPlayerTags(menuUtil.getOwner().getUniqueId());
     }
 
     @Override
@@ -67,10 +65,10 @@ public class PersonalTagsMenu extends Paged {
                     menuUtil.setIdentifier(tagevent.getTag());
                 }
             }
-        } else if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTags.getInstance().getConfig().getString("gui.layout.close-menu-material")).toUpperCase()))) {
+        } else if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("gui.layout.close-menu-material")).toUpperCase()))) {
             player.closeInventory();
-        } else if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTags.getInstance().getConfig().getString("gui.layout.reset-tag-material")).toUpperCase()))) {
-            if (!SupremeTags.getInstance().getConfig().getBoolean("settings.forced-tag")) {
+        } else if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("gui.layout.reset-tag-material")).toUpperCase()))) {
+            if (!SupremeTagsPremium.getInstance().getConfig().getBoolean("settings.forced-tag")) {
                 TagResetEvent tagEvent = new TagResetEvent(player, false);
                 Bukkit.getPluginManager().callEvent(tagEvent);
 
@@ -81,7 +79,7 @@ public class PersonalTagsMenu extends Paged {
                 super.open();
                 menuUtil.setIdentifier("None");
             }
-        } else if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTags.getInstance().getConfig().getString("gui.layout.back-next-material")).toUpperCase()))) {
+        } else if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("gui.layout.back-next-material")).toUpperCase()))) {
             if (ChatColor.stripColor(Objects.requireNonNull(e.getCurrentItem().getItemMeta()).getDisplayName()).equalsIgnoreCase("Back")) {
                 if (page != 0) {
                     page = page - 1;
@@ -97,12 +95,12 @@ public class PersonalTagsMenu extends Paged {
             if (ChatColor.stripColor(Objects.requireNonNull(e.getCurrentItem().getItemMeta()).getDisplayName()).equalsIgnoreCase("Create a Tag")) {
                 // create a tag
 
-                if (tags.size() < SupremeTags.getInstance().getConfig().getInt("settings.personal-tags.limit")) {
-                    if (!SupremeTags.getInstance().getSetupList().containsKey(player)) {
+                if (tags.size() < SupremeTagsPremium.getInstance().getConfig().getInt("settings.personal-tags.limit")) {
+                    if (!SupremeTagsPremium.getInstance().getSetupList().containsKey(player)) {
                         player.closeInventory();
 
                         SetupTag setup = new SetupTag(1);
-                        SupremeTags.getInstance().getSetupList().put(player, setup);
+                        SupremeTagsPremium.getInstance().getSetupList().put(player, setup);
 
                         msgPlayer(player, "&6&lStage 1: &7Enter a name for the tag. &6&o(type in normal chat)");
                     }
@@ -134,17 +132,17 @@ public class PersonalTagsMenu extends Paged {
 
                 nbt.setString("identifier", t.getIdentifier());
 
-                tagMeta.setDisplayName(format("&7Tag: " + t.getTag()));
+                tagMeta.setDisplayName(format("&7Tag: " + t.getCurrentTag()));
                 tagMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 tagMeta.addItemFlags(ItemFlag.HIDE_DYE);
                 tagMeta.addItemFlags(ItemFlag.HIDE_DESTROYS);
                 tagMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
                 // set lore
-                ArrayList<String> lore = (ArrayList<String>) SupremeTags.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
+                ArrayList<String> lore = (ArrayList<String>) SupremeTagsPremium.getInstance().getConfig().getStringList("gui.tag-menu-none-categories.tag-item.unlocked-lore");
                 lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%description%", t.getDescription()));
                 lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%identifier%", t.getIdentifier()));
-                lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getTag()));
+                lore.replaceAll(s -> ChatColor.translateAlternateColorCodes('&', s).replaceAll("%tag%", t.getCurrentTag()));
 
                 tagMeta.setLore(color(lore));
 

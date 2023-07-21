@@ -1,7 +1,7 @@
 package net.noscape.project.supremetags.guis.tageditor;
 
 import de.tr7zw.nbtapi.NBTItem;
-import net.noscape.project.supremetags.SupremeTags;
+import net.noscape.project.supremetags.SupremeTagsPremium;
 import net.noscape.project.supremetags.handlers.Tag;
 import net.noscape.project.supremetags.handlers.menu.MenuUtil;
 import net.noscape.project.supremetags.handlers.menu.Paged;
@@ -22,12 +22,12 @@ public class TagEditorMenu extends Paged {
 
     public TagEditorMenu(MenuUtil menuUtil) {
         super(menuUtil);
-        tags = SupremeTags.getInstance().getTagManager().getTags();
+        tags = SupremeTagsPremium.getInstance().getTagManager().getTags();
     }
 
     @Override
     public String getMenuName() {
-        return format(Objects.requireNonNull(SupremeTags.getInstance().getConfig().getString("gui.tag-editor-menu.title")).replaceAll("%page%", String.valueOf(this.getPage())));
+        return format(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("gui.tag-editor-menu.title")).replaceAll("%page%", String.valueOf(this.getPage())));
     }
 
     @Override
@@ -42,12 +42,12 @@ public class TagEditorMenu extends Paged {
 
         ArrayList<String> tag = new ArrayList<>(tags.keySet());
 
-        String back = SupremeTags.getInstance().getConfig().getString("gui.strings.back-item");
-        String close = SupremeTags.getInstance().getConfig().getString("gui.strings.close-item");
-        String next = SupremeTags.getInstance().getConfig().getString("gui.strings.next-item");
-        String refresh = SupremeTags.getInstance().getConfig().getString("gui.strings.refresh-item");
-        String reset = SupremeTags.getInstance().getConfig().getString("gui.strings.reset-item");
-        String active = SupremeTags.getInstance().getConfig().getString("gui.strings.active-item");
+        String back = SupremeTagsPremium.getInstance().getConfig().getString("gui.strings.back-item");
+        String close = SupremeTagsPremium.getInstance().getConfig().getString("gui.strings.close-item");
+        String next = SupremeTagsPremium.getInstance().getConfig().getString("gui.strings.next-item");
+        String refresh = SupremeTagsPremium.getInstance().getConfig().getString("gui.strings.refresh-item");
+        String reset = SupremeTagsPremium.getInstance().getConfig().getString("gui.strings.reset-item");
+        String active = SupremeTagsPremium.getInstance().getConfig().getString("gui.strings.active-item");
 
         if (!ChatColor.stripColor(Objects.requireNonNull(e.getCurrentItem().getItemMeta()).getDisplayName()).startsWith("Active")
                 && !ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Next")
@@ -57,14 +57,14 @@ public class TagEditorMenu extends Paged {
             NBTItem nbt = new NBTItem(e.getCurrentItem());
             String identifier = nbt.getString("identifier");
             menuUtil.setIdentifier(identifier);
-            new SpecificTagMenu(SupremeTags.getMenuUtilIdentifier(player, identifier)).open();
+            new SpecificTagMenu(SupremeTagsPremium.getMenuUtilIdentifier(player, identifier)).open();
         }
 
-        if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTags.getInstance().getConfig().getString("gui.layout.close-menu-material")).toUpperCase()))) {
+        if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("gui.layout.close-menu-material")).toUpperCase()))) {
             player.closeInventory();
         }
 
-        if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTags.getInstance().getConfig().getString("gui.layout.back-next-material")).toUpperCase()))) {
+        if (e.getCurrentItem().getType().equals(Material.valueOf(Objects.requireNonNull(SupremeTagsPremium.getInstance().getConfig().getString("gui.layout.back-next-material")).toUpperCase()))) {
             if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(format(back))) {
                 if (page != 0) {
                     page = page - 1;
