@@ -1,4 +1,4 @@
-# SupremeTags (PRIVATE-PREMIUM)
+# SupremeTags (PREMIUM)
 Allow players to show of their supreme tags!
 
 > Download: Coming soon!
