@@ -23,7 +23,13 @@ settings:
   locked-view: false # this setting allows players to view locked/unlocked tags.
   personal-tags:
     enable: true # this setting allows players to make and access their own tags.
-    limit: 10 # how many tags should a player be allowed to make?
+    limits:
+      # permission limits: supremetags.mytags.limit.<group>
+      ## example: supremetags.mytags.limit.default
+      default: 10
+      ## example: supremetags.mytags.limit.vip
+      vip: 20
+    format-replace: '%tag%' # strict format replacer.
   # layout types: [FULL, BORDER]
   # FULL - 36 tags
   # BORDER - 28 tags
