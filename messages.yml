@@ -1,0 +1,47 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                    Messages                          | #
+# +------------------------------------------------------+ #
+############################################################
+
+messages:
+  prefix: '&8[&6&lTags&8]'
+  tag-select-message: '%prefix% &e%identifier% &7tag selected.'
+  reset-message: '%prefix% &7Reset tag.'
+  insufficient-funds: '%prefix% &cInsufficient funds. &7You need &c$%cost% &7to get this tag.'
+  tag-unlocked: '%prefix% &7You have unlocked the tag: &6%identifier%'
+  reload: '%prefix% &7Reloaded plugin.'
+  no-permission: '%prefix% &cNo Permission.'
+  no-tags: '%prefix% &cYou have no tags yet.'
+  tag-command-disabled: '%prefix% &cTag command is disabled in this world.'
+  invalid-tag: '%prefix% &cThis tag does not exist.'
+  valid-tag: '%prefix% &cThis tag already exists.'
+  invalid-category: '%prefix% &cThis category does not exist.'
+  locked-tag: '%prefix% &cYou do not have access to select this tag!'
+  already-have-tag: '%prefix% &7You already own this tag!'
+  not-owned-tag: '%prefix% &7You don''t own this tag!'
+  tag-updated: '%prefix% &7Tag has been updated.'
+  no-access-category: '%prefix% &cYou don''t have permission to access these tags.'
+  no-tags-category: '%prefix% &cThere are no tags in this category.'
+  bad-word: '%prefix% &cMessage contains a bad word! Please try again.'
+  player-not-have-tag: '%prefix% &7This player does not have this tag!'
+  inventory-full: '%prefix% &7Inventory full, remove some items.'
+  tag-vouchers-disabled: '%prefix% &7Tags vouchers are disabled!'
+  withdraw-failed-selected: '%prefix% &7You can''t withdraw a tag you''ve selected!'
+  tag-not-withdrawable: '%prefix% &7This tag is not withdrawable!'
+  tag-withdrawn: '%prefix% &7Tag &e%identifier% &7Withdrawn!'
+  luckperms-not-found: '%prefix% &7Luckperms not found, cancelling voucher!'
+  player-not-online: '%prefix% &cThis player is not online!'
+  given-voucher: '%prefix% &7You have given &f%target%&7 the &e%identifier% &7voucher!'
+  received-voucher: '%prefix% &7You have received voucher: &e%identifier%'
+  editor:
+    tag: '%prefix% &7You are setting a new tag. &6Type it in chat.'
+    description: '%prefix% &7You are setting a new description. &6Type it in chat.'
+    category: '%prefix% &7You are setting a new category. &6Type it in chat.'
+    permission: '%prefix% &7You are setting a new permission. &6Type it in chat.'
+    deleted: '%prefix% &7Tag deleted!'
+  stages:
+    stage-1: '&6&lStage 1: &7Enter a name for the tag. &6&o(type in normal chat)'
+    stage-2: '&6&lStage 2: &7What do you want the tag to look like? &6&o(type in normal chat)'
+    complete: '&6&lComplete: &7New Tag: &6%identifier% &7- %tag% &7has been created.'
+    cancelled: '&6&lStage: &7Cancelled setup process.'
