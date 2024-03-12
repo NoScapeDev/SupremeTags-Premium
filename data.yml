@@ -1,0 +1,26 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                       Data                           | #
+# +------------------------------------------------------+ #
+############################################################
+
+# make sure you can check your panel database info to make sure everything is correct.
+# Note: There are no extra steps needed for H2 or SQLite.
+data:
+  # types: [H2 / SQLite(RECOMMENDED OVER H2) / MYSQL]
+  type: 'SQLite'
+
+  # The address for the database server.
+  # - to enable this part, change type to 'MYSQL'
+  # - some hosts can use your domain or server ip.
+  address: 'host'
+  # The standard DB engine port is used by default
+  port: 3306
+  # The name of the database to store tag data in.
+  database: 'database'
+  # Credentials for the database.
+  username: 'user'
+  password: 'pass'
+  # leave this, if you don't know how to use options.
+  options: 'useSSL=false&autoReconnect=true'
+  useSSL: false
