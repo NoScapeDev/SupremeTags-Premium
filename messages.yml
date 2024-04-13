@@ -5,13 +5,15 @@
 ############################################################
 
 messages:
-  prefix: '&8[&6&lTags&8]'
+  prefix: '&e&lTags &8➜'
   tag-select-message: '%prefix% &e%identifier% &7tag selected.'
   reset-message: '%prefix% &7Reset tag.'
   insufficient-funds: '%prefix% &cInsufficient funds. &7You need &c$%cost% &7to get this tag.'
   tag-unlocked: '%prefix% &7You have unlocked the tag: &6%identifier%'
   reload: '%prefix% &7Reloaded plugin.'
+  no-console-access: '%prefix% &cOnly in-game players can use this command!'
   no-permission: '%prefix% &cNo Permission.'
+  no-permission-voucher: '%prefix% &cYou don''t have permission to redeem the &7%identifier% &cvoucher!'
   no-tags: '%prefix% &cYou have no tags yet.'
   tag-command-disabled: '%prefix% &cTag command is disabled in this world.'
   invalid-tag: '%prefix% &cThis tag does not exist.'
@@ -30,10 +32,15 @@ messages:
   withdraw-failed-selected: '%prefix% &7You can''t withdraw a tag you''ve selected!'
   tag-not-withdrawable: '%prefix% &7This tag is not withdrawable!'
   tag-withdrawn: '%prefix% &7Tag &e%identifier% &7Withdrawn!'
-  luckperms-not-found: '%prefix% &7Luckperms not found, cancelling voucher!'
+  vault-not-found: '%prefix% &7Vault not found, cancelling voucher!'
   player-not-online: '%prefix% &cThis player is not online!'
   given-voucher: '%prefix% &7You have given &f%target%&7 the &e%identifier% &7voucher!'
   received-voucher: '%prefix% &7You have received voucher: &e%identifier%'
+  ptags-limit-reached: '%prefix% &7The tag limit has been reached!'
+  ptags-tag-deleted: '%prefix% &7Tag deleted!'
+  ptags-setting-new-tag: '%prefix% &7You are setting a new tag. &6Type it in chat.'
+  ptags-setting-new-description: '%prefix% &7You are setting a new description. &6Type it in chat.'
+  ptags-unselect-warning: '%prefix% &7Please unselect this tag before deleting!'
   editor:
     tag: '%prefix% &7You are setting a new tag. &6Type it in chat.'
     description: '%prefix% &7You are setting a new description. &6Type it in chat.'

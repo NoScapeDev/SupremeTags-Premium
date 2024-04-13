@@ -5,6 +5,13 @@
 ############################################################
 
 settings:
+  commands:
+    # set custom aliases for /tags
+    # ** adding/removing these aliases require a restart to take effect! **
+    aliases:
+      - tag
+      - stags
+      - supremetags
   default-tag: 'none' # set 'none' players start with no tag.
   forced-tag: false # this will make it force players to have a tag, they won't beable to take the tag off.
   categories: false # should supremetags use the category system?
@@ -38,3 +45,5 @@ settings:
   tag-vouchers: true # should tag vouchers withdraw be enabled?
   none-output: '&6None' # none output string when they don't have a tag, set to '' if you want no return.
   economy: 'VAULT' # economies: [VAULT, PLAYERPOINTS]
+  prioritise-selected-tag: true # set false if you don't want selected tag to force at first slot.
+  voucher-redeem-permission: true # set false if you don't want permission 'supremetags.voucher.[identifier]' applying to tag vouchers.

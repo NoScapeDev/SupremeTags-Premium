@@ -7,6 +7,11 @@
 # make sure you can check your panel database info to make sure everything is correct.
 # Note: There are no extra steps needed for H2 or SQLite.
 data:
+
+  # Should SupremeTags cache data? this will optimize the amount of connections being used but will minimize db use across servers.
+  # If disabled, this setting only applies to MySQL type.
+  cache-data: true
+
   # types: [H2 / SQLite(RECOMMENDED OVER H2) / MYSQL]
   type: 'SQLite'
 
